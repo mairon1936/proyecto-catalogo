@@ -1,20 +1,26 @@
-catalogo_negocio = [
+﻿catalogo_negocio = [
     {"nombre": "masajes corporales", "precio": 500.00, "disponivilidad": True},
     {"nombre": "manicura", "precio": 200.00, "disponivilidad": True},
     {"nombre": "pedicura", "precio": 300.00, "disponivilidad": False}
 ]
 
 
+class Negocio:
+    def __init__(self, catalogo):
+        self.catalogo = catalogo
+
+
 def buscar_producto(catalogo, nombre_buscado):
+    nombre_buscado = nombre_buscado.strip().lower()
     for producto in catalogo:
-        if producto["nombre"] == nombre_buscado:
+        if producto["nombre"].lower() == nombre_buscado:
             return producto
     return None
 
 
 def agregar_productos(catalogo, nombre, precio, disponible):
     producto = {
-        "nombre": nombre,
+        "nombre": nombre.strip(),
         "precio": precio,
         "disponivilidad": disponible
     }
@@ -23,39 +29,65 @@ def agregar_productos(catalogo, nombre, precio, disponible):
 
 def productos_disponibles(catalogo):
     while True:
+        print("\n--- Menú de productos ---")
         print("1. Ver catálogo completo")
         print("2. Buscar un producto")
         print("3. Agregar un producto nuevo")
         print("4. Ver solo los productos disponibles")
         print("0. Salir")
-        opcion = input("Elige una opción: ")
+        opcion = input("Elige una opción: ").strip()
 
         if opcion == "1":
+            if not catalogo:
+                print("El catálogo está vacío.")
+                continue
             for producto in catalogo:
                 print(f"{producto['nombre']}: ${producto['precio']}")
 
-        if opcion == "2":
-            nombre_buscado = input("Introduce el nombre del producto: ")
+        elif opcion == "2":
+            nombre_buscado = input("Introduce el nombre del producto: ").strip()
+            if not nombre_buscado:
+                print("Debes escribir un nombre válido.")
+                continue
             producto = buscar_producto(catalogo, nombre_buscado)
             if producto is not None:
                 print(producto)
             else:
                 print("Producto no encontrado")
 
-        if opcion == "3":
-            nombre = input("Introduce el nombre del producto: ")
-            precio = float(input("Introduce el precio del producto: "))
+        elif opcion == "3":
+            nombre = input("Introduce el nombre del producto: ").strip()
+            if not nombre:
+                print("El nombre del producto no puede estar vacío.")
+                continue
+
+            try:
+                precio = float(input("Introduce el precio del producto: "))
+            except ValueError:
+                print("El precio debe ser un número válido.")
+                continue
+
+            if precio <= 0:
+                print("El precio debe ser mayor que cero.")
+                continue
+
             agregar_productos(catalogo, nombre, precio, True)
             print("Producto agregado correctamente")
 
-        if opcion == "4":
-            for producto in catalogo:
-                if producto["disponivilidad"]:
-                    print(f"{producto['nombre']}: ${producto['precio']}")
+        elif opcion == "4":
+            productos_en_stock = [producto for producto in catalogo if producto["disponivilidad"]]
+            if not productos_en_stock:
+                print("No hay productos disponibles en este momento.")
+                continue
+            for producto in productos_en_stock:
+                print(f"{producto['nombre']}: ${producto['precio']}")
 
-        if opcion == "0":
+        elif opcion == "0":
             print("Adiós")
             break
+
+        else:
+            print("Opción no válida. Inténtalo de nuevo.")
 
 
 def main():

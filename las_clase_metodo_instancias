@@ -1,0 +1,14 @@
+class Persona:
+    def __init__(self, nombre):
+        self.nombre = nombre
+
+    def saludar(self):
+        print(f"hola, soy {self.nombre}")
+
+ana = Persona("ana")
+manuel = Persona("manuel")
+
+ana.saludar()
+
+manuel.saludar()
+        
