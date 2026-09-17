@@ -1,11 +1,4 @@
-﻿catalogo_negocio = [
-    {"nombre": "masajes corporales", "precio": 500.00, "disponivilidad": True},
-    {"nombre": "manicura", "precio": 200.00, "disponivilidad": True},
-    {"nombre": "pedicura", "precio": 300.00, "disponivilidad": False}
-]
-
-
-class Negocio:
+﻿class Negocio:
     def __init__(self, catalogo):
         self.catalogo = catalogo
 
@@ -14,9 +7,10 @@ class Negocio:
             print(f"{producto['nombre']}: ${producto['precio']}")
 
     def buscar_producto(self, nombre_buscado):
-        nombre_buscado = nombre_buscado.strip().lower()
+        nombre_buscado = str(nombre_buscado).strip().lower()
         for producto in self.catalogo:
-            if producto["nombre"].lower() == nombre_buscado:
+            nombre_producto = str(producto.get("nombre", "")).strip().lower()
+            if nombre_producto == nombre_buscado:
                 return producto
         return None
 
@@ -35,8 +29,11 @@ class Negocio:
         self.catalogo.append(producto)
         return producto
 
+    def productos_disponibles(self):
+        return [producto for producto in self.catalogo if producto["disponivilidad"]]
 
-def productos_disponibles(catalogo):
+
+def menu(negocio):
     while True:
         print("\n--- Menú de productos ---")
         print("1. Ver catálogo completo")
@@ -47,18 +44,17 @@ def productos_disponibles(catalogo):
         opcion = input("Elige una opción: ").strip()
 
         if opcion == "1":
-            if not catalogo:
+            if not negocio.catalogo:
                 print("El catálogo está vacío.")
                 continue
-            for producto in catalogo:
-                print(f"{producto['nombre']}: ${producto['precio']}")
+            print("\nCatálogo completo:")
+            negocio.ver_catalogo()
 
         elif opcion == "2":
             nombre_buscado = input("Introduce el nombre del producto: ").strip()
             if not nombre_buscado:
                 print("Debes escribir un nombre válido.")
                 continue
-            negocio = Negocio(catalogo)
             producto = negocio.buscar_producto(nombre_buscado)
             if producto is not None:
                 print(producto)
@@ -71,7 +67,6 @@ def productos_disponibles(catalogo):
                 print("El nombre del producto no puede estar vacío.")
                 continue
 
-            negocio = Negocio(catalogo)
             precio_texto = input("Introduce el precio del producto: ")
             producto = negocio.agregar_productos(nombre, precio_texto, True)
 
@@ -81,7 +76,7 @@ def productos_disponibles(catalogo):
             print("Producto agregado correctamente")
 
         elif opcion == "4":
-            productos_en_stock = [producto for producto in catalogo if producto["disponivilidad"]]
+            productos_en_stock = negocio.productos_disponibles()
             if not productos_en_stock:
                 print("No hay productos disponibles en este momento.")
                 continue
@@ -97,7 +92,13 @@ def productos_disponibles(catalogo):
 
 
 def main():
-    productos_disponibles(catalogo_negocio)
+    catalogo_negocio = [
+        {"nombre": "masajes corporales", "precio": 500.00, "disponivilidad": True},
+        {"nombre": "manicura", "precio": 200.00, "disponivilidad": True},
+        {"nombre": "pedicura", "precio": 300.00, "disponivilidad": True}
+    ]
+    negocio = Negocio(catalogo_negocio)
+    menu(negocio)
 
 
 if __name__ == "__main__":
