@@ -22,13 +22,6 @@ def agregar_productos(catalogo, nombre, precio, disponible):
 
 
 def productos_disponibles(catalogo):
-    for producto in catalogo:
-        if producto["disponivilidad"]:
-            print(f"{producto['nombre']}: ${producto['precio']}")
-
-
-
-def main():
     while True:
         print("1. Ver catálogo completo")
         print("2. Buscar un producto")
@@ -38,12 +31,12 @@ def main():
         opcion = input("Elige una opción: ")
 
         if opcion == "1":
-            for producto in catalogo_negocio:
+            for producto in catalogo:
                 print(f"{producto['nombre']}: ${producto['precio']}")
 
         if opcion == "2":
             nombre_buscado = input("Introduce el nombre del producto: ")
-            producto = buscar_producto(catalogo_negocio, nombre_buscado)
+            producto = buscar_producto(catalogo, nombre_buscado)
             if producto is not None:
                 print(producto)
             else:
@@ -52,15 +45,21 @@ def main():
         if opcion == "3":
             nombre = input("Introduce el nombre del producto: ")
             precio = float(input("Introduce el precio del producto: "))
-            agregar_productos(catalogo_negocio, nombre, precio, True)
+            agregar_productos(catalogo, nombre, precio, True)
             print("Producto agregado correctamente")
 
         if opcion == "4":
-            productos_disponibles(catalogo_negocio)
+            for producto in catalogo:
+                if producto["disponivilidad"]:
+                    print(f"{producto['nombre']}: ${producto['precio']}")
 
         if opcion == "0":
             print("Adiós")
             break
+
+
+def main():
+    productos_disponibles(catalogo_negocio)
 
 
 if __name__ == "__main__":
