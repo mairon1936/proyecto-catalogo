@@ -13,13 +13,12 @@ class Negocio:
         for producto in self.catalogo:
             print(f"{producto['nombre']}: ${producto['precio']}")
 
-
-def buscar_producto(catalogo, nombre_buscado):
-    nombre_buscado = nombre_buscado.strip().lower()
-    for producto in catalogo:
-        if producto["nombre"].lower() == nombre_buscado:
-            return producto
-    return None
+    def buscar_producto(self, nombre_buscado):
+        nombre_buscado = nombre_buscado.strip().lower()
+        for producto in self.catalogo:
+            if producto["nombre"].lower() == nombre_buscado:
+                return producto
+        return None
 
 
 def agregar_productos(catalogo, nombre, precio, disponible):
@@ -53,7 +52,8 @@ def productos_disponibles(catalogo):
             if not nombre_buscado:
                 print("Debes escribir un nombre válido.")
                 continue
-            producto = buscar_producto(catalogo, nombre_buscado)
+            negocio = Negocio(catalogo)
+            producto = negocio.buscar_producto(nombre_buscado)
             if producto is not None:
                 print(producto)
             else:
