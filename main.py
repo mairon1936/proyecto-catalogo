@@ -9,6 +9,10 @@ class Negocio:
     def __init__(self, catalogo):
         self.catalogo = catalogo
 
+    def ver_catalogo(self):
+        for producto in self.catalogo:
+            print(f"{producto['nombre']}: ${producto['precio']}")
+
 
 def buscar_producto(catalogo, nombre_buscado):
     nombre_buscado = nombre_buscado.strip().lower()
